@@ -1,4 +1,6 @@
 import gameScene from './gameScene.js';
+import titleScreen from './titleScreen.js';
+import endScene from './endScene.js';
 // import titleScreen from './titleScreen.js'
 
 export default {
@@ -13,5 +15,5 @@ export default {
             debug: true
         },
     },
-    scene: [gameScene]
+    scene: [titleScreen, gameScene, endScene]
 };
