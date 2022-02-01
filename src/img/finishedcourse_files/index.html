@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html xmlns:ng="http://angularjs.org" lang="en" id="ng-app" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns:ng="http://angularjs.org" lang="en" id="ng-app" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns:ng="http://angularjs.org" lang="en" id="ng-app" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html xmlns:ng="http://angularjs.org" lang="en" id="ng-app" class="no-js"> <![endif]-->
+<html id="ng-app" lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="X-UA-Compatible" content="IE=11">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <!-- build:remove:street -->
+        <title>Basic eCourse</title>
+        <!-- /build -->
+
+        <link rel="stylesheet" href="index_data/bootstrap.css">
+
+        <link rel="stylesheet" href="index_data/main.css">
+
+        <style>
+            .app-container {
+                width: 100%;
+                height: 100%;
+                max-width: 1200px;
+                background: #e4e4e4;
+                overflow: hidden;
+                position: absolute;
+            }
+
+            .app-container .app-header {
+                position: absolute;
+                width: 100%;
+                height: 50px;
+                background-color: #fff;
+                z-index: 2;
+                box-sizing: border-box;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.07);
+            }
+
+            .app-container .app-footer {
+                position: absolute;
+                width: 100%;
+                height: 50px;
+                background-color: #fff;
+                left: 0;
+                bottom: 0;
+                z-index: 3;
+            }
+
+            .app-container .app-content {
+                overflow-y: auto;
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 50px;
+                bottom: 65px;
+                background-color: #e3e3e3;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .app-container .app-content > div {
+                position: absolute;
+                width: 100%;
+                top: 50px;
+                bottom: 0;
+                background: #fff;
+            }
+
+            .app-title {
+                font-size: 22px;
+                line-height: 48px;
+                color: black;
+                font-weight: bold;
+                letter-spacing: 0.24px;
+                float: unset;
+                margin-left: 5px;
+            }
+
+            .app-sub-header .page-title {
+                overflow-x: hidden;
+            }
+        </style>
+        <!-- build:remove:street -->
+        <style>
+            @media (max-width: 480px) {
+                .app-title-es {
+                    font-size: 4vw;
+                }
+            }
+        </style>
+        <!-- /build -->
+    </head>
+    <body data-ng-controller="AppController" class="ng-scope">
+        <div class="app-container">
+            <div class="app-header">
+                <a id="menuBtn" type="button" class="btn btn-default btn-lg pull-left"><i class="glyphicon glyphicon-menu-hamburger"></i><br><span>MENU</span></a>
+                <img style="margin-top: 6px; float: left" src="index_data/msf_logo.png">
+                <p class="app-title hidden ng-binding show" ng-class="{'show' : appStarted, 'app-title-es' : lang=='es' }" ng-bind-html="appTitle[lang]"> Basic e<i>Course</i></p>
+            </div>
+            <div class="app-sub-header">
+                <h3 class="section-title ng-binding" ng-bind-html="currentPage.parent[lang]">Conclusion</h3>
+                <h3 class="page-title ng-binding" ng-bind-html="currentPage[lang]">Conclusion</h3>
+            </div>
+            <div class="app-footer">
+                <div id="pageProgressBar" class="navbar-fixed-bottom app-page-progress-bar">
+                    <div class="progress-bar" ng-attr-style="width:{{pageProgress}}%;" style="width:100%;"></div>
+                </div>
+
+                <div id="courseProgressBar" class="navbar-fixed-bottom app-progress-bar">
+                    <div class="progress-bar" ng-attr-style="width:{{courseProgress}}%;" style="width:100%;"></div>
+                </div>
+
+                <div id="appSectionProgressBar" section-progress-indicator=""><div style="left: 4.3478260869565215%;"></div><div style="left: 9.23913043478261%;"></div><div style="left: 16.847826086956523%;"></div><div style="left: 29.347826086956523%;"></div><div style="left: 45.652173913043484%;"></div><div style="left: 51.08695652173914%;"></div><div style="left: 58.152173913043484%;"></div><div style="left: 71.73913043478261%;"></div><div style="left: 79.34782608695653%;"></div><div style="left: 88.04347826086958%;"></div><div style="left: 95.6521739130435%;"></div><div style="left: 99.45652173913045%;"></div><div style="left: 100.00000000000001%;"></div></div>
+
+                <a id="settingsBtn" class="btn btn-default btn-lg pull-right glyphicon glyphicon-cog app-ui-btn"></a>
+                <a id="certBtn" class="btn btn-default btn-lg pull-left app-ui-btn show pulse last-page"></a>
+                <div class="app-navbar-controls">
+                    <a id="backBtn" class="btn btn-default btn-lg glyphicon glyphicon-triangle-left app-ui-btn"></a>
+                    <a id="playPauseBtn" class="btn btn-default btn-lg glyphicon glyphicon-play app-ui-btn"></a>
+                    <a id="nextBtn" class="btn btn-default btn-lg glyphicon glyphicon-triangle-right app-ui-btn disabled"></a>
+                </div>
+            </div>
+            <div class="app-nav">
+                <div id="navigation" accordion-menu="" template-url="pages/accordionmenu.html" label-field="lang" data="sectionList" allow-multiple-open="false" callback="setPage" class="sidebar sidebar-left ng-isolate-scope"><div style="position: relative; width: 100%; height: 100%">
+    <!-- ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">1.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding"> Course Introduction </div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-bottom" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="menu-accordion-item-closed">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0101" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])"> <i>RiderCourse</i> Program Objectives </a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0102" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])"> About this online MSF Basic e<i>Course</i> </a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0103" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])"> e<i>Course</i> Structure </a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0104" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">e<i>Course</i> Requirements</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0105" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Intended Audience</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0106" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">General Information</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0107" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Knowledge Check</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0108" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Moving On</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">2.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding">Motorcycle Types</div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-bottom" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="menu-accordion-item-closed">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0201" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Section Overview</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0202" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Definition of a Motorcycle</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0203" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">The Three Basic Motorcycle Types</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0204" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Street</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0205" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Street Motorcycles</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0206" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Dual-Purpose</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0207" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Off-Highway</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0208" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Knowledge Check</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0209" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Moving On</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">3.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding">Controls, Indicators, and Equipment</div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-bottom" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="menu-accordion-item-closed">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0301" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Section Overview</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0302" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Handlebars &amp; Throttle</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0303" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Clutch Lever</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0304" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Gearshift Lever</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0305" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Front Brake Lever &amp; Rear Brake Pedal</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0306" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Fuel Supply Valve</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0307" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Ignition Switch</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0308" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Choke Control</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0309" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Other Switches</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0310" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Horn Button &amp; Engine Start Button</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0311" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Indicators</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0312" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Equipment</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0313" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Knowledge Check</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0314" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Moving On</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">4.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding">About Basic Operation</div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-bottom" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="menu-accordion-item-closed">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0401" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Section Overview</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0402" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">FINE-C</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0403" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Engine Start Procedure</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0404" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Engine Stop Procedure</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0405" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Clutch Lever &amp; Friction Zone</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0406" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Riding Posture</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0407a" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Turns-Corners-Curves</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0407b" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Turns-Corners-Curves, Cont.</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0408" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Basic Steps for Turning</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0409" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Basic Turning: Step 1</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0410" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Basic Turning: Step 2</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0411" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Basic Turning: Step 3</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0412" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Basic Turning: Step 4</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0413" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Search-Setup-Smooth</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0414" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Basic Turning</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0415" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Braking</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0416" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Stopping</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0417" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Total Stopping Distance</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0418" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Up-shifting</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0419" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Downshifting</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0420" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Engine Braking</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0421" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Knowledge Check</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0422" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Moving On</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">5.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding">Preparing to Ride</div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-bottom" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="menu-accordion-item-closed">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0501" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Section Overview</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0502" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Motorcycle Fit</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0503" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Pre-Ride Inspection</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0504" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Tires and Wheels</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0505" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Controls</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0506" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Lights and Electrics</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0507" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Oil and Other Fluids</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0508" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Chassis</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0509" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Stands</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0510" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Maintenance</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0511" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Personal Protective Gear</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0512" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Gearing Up</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0513" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Head and Brain Protection</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0514" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Helmet Basics</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0515" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Choosing a Helmet</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0516" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Helmet Care</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0517" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Windscreens</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0518a" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Eye and Face Protection</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0518b" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Eye and Face Protection, Cont.</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0519" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Foot Protection</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0520" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Hand Protection</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0521a" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Jackets, Pants, Riding Suits</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0521b" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Jackets, Pants, Riding Suits, Cont.</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0522" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Rain Protection</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0523" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Cold Weather Protection</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0524" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Hot Weather Protection</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0525" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Hearing Protection</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0526" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Mental Attitude</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0527" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Knowledge Check</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0528" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Moving On</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">6.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding">Risk and Riding</div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-bottom" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="menu-accordion-item-closed">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0601" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Section Overview</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0602" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Risk Awareness</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0603" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Why Crashes Happen</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0604" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Risk Acceptance</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0605" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">What Causes Crashes</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0606" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">What is a Good Rider?</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0607" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Risk Management</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0608" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Self-Awareness</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0609" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Knowledge Check</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0610" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Moving On</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">7.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding">Basic Street Strategies</div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-bottom" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="menu-accordion-item-closed">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0701" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Section Overview</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0702a" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Positioning – Lane Choice</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0702b" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Positioning – Lane Choice</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0703" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Positioning – Lane Position</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0704" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Being Visible</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0705" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">RiderRadar</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0706" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Visual Lead Times &amp; Distances</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0707" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Total Stopping Distance</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0708" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">SEE – Search</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0709" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">SEE – Evaluate</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0710" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">SEE – Execute</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0711" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Knowledge Check</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0712" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Moving On</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">8.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding">Strategies for Common Riding Situations</div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-bottom" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="menu-accordion-item-closed">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0801" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Section Overview</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0802" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Intersections</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0803" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Intersections, Cont.</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0804" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Between Intersections</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0805" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Blind Spots</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0806" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Lane Changes</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0807" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Merging</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0808" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Curves</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0809" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Curves, Cont.</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0810" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">SEE Curves</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0811" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Additional Tips for Curves</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0812a" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Limited Space Maneuvers</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0812b" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Limited Space Maneuvers, Cont.</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0813" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Starting on a Hill</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0814" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Obstacles</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0815" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Parking</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0816" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Road Furniture</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0817a" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Passing</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0817b" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Passing, Cont.</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0818" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Tailgaters</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0819" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Night Riding</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0820a" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Group Riding</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0820b" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Group Riding, Cont.</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0821" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Knowledge Check</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0822" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Moving On</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">9.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding">Basics for Emergencies</div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-bottom" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="menu-accordion-item-closed">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0901" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Section Overview</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0902" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Braking Systems</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0903a" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Emergency Stop in a Straight Line</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0903b" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Emergency Stop in a Straight Line, Cont.</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0904" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Emergency Stop in a Curve</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0905" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Front Tire Skid</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0906a" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Rear Tire Skid</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0906b" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Rear Tire Skid, Cont.</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0907" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Swerving</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0908" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Swerving – On a Straight Road</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0909" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Swerving – In a Curve</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0910" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Brake or Swerve</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0911" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Knowledge Check</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/0912" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Moving On</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">10.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding">Special Riding Situations</div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-bottom" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="menu-accordion-item-closed">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1001" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Section Overview</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1002" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Road Surfaces</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1003a" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Carrying Passengers</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1003b" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Carrying Passengers, Cont.</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1004" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Carrying Extra Weight</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1005" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Touring</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1006" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Wind</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1007" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Animals</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1008" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Select Maintenance Issues – Tire Failure</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1009" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Select Maintenance Issues – Stuck Throttle</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1010" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Select Maintenance Issues – Clutch Cable Failure</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1011" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Select Maintenance Issues – Weave or Wobble</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1012" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Select Maintenance Issues – Drive Train Problem</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1013" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Select Maintenance Issues – Engine Seizure</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1014" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Knowledge Check</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1015" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Moving On</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">11.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding">Rider Impairments</div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-bottom" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="menu-accordion-item-closed">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1101" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Section Overview</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1102" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Alcohol</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1103" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Blood Alcohol Content</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1104" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Alcohol’s Duration in the Body</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1105" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Drugs</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1106" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Intervention</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1107" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Distraction</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1108" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Other Factors – Fatigue</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1109" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Other Factors – Emotions</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1110" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Other Factors – Aging</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1111" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Other Factors – Riding at the Limit</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1112" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Risk – Revisited</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1113" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Knowledge Check</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1114" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Moving On</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">12.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding">Range Preparation</div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-bottom" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="menu-accordion-item-closed">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1201" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Section Overview</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1202" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Range Safety Rules</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1203" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Range Safety Rules, Cont.</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1204" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Self-Preparation</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1205" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">RiderCoach Signals</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1206" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">General Sequence of Each Range Exercise</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1207" style="cursor: pointer" class="app-menu-page-item ng-binding" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Knowledge Check</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} --><div ng-repeat="item in data | filter:{inmenu:true}" class="ng-scope">
+        <div class="list-group-item app-menu-item active" ng-click="onOpen(item)" ng-class="{'active' : item.selected}">
+            <div style="display: table">
+                <div style="display: table-cell; width: 20px; text-align: right" class="ng-binding">13.</div>
+                <div style="display: table-cell; padding-left: 4px" class="ng-binding">Conclusion</div>
+            </div>
+            <span style="position: absolute; width: 10px;height: 10px; right: 10px; top: 22px;" class="glyphicon glyphicon-triangle-top" ng-class="{'glyphicon-triangle-top' : item.selected, 'glyphicon-triangle-bottom' : item.selected == false}">
+            </span>
+        </div>
+        <div ng-class="{'menu-accordion-item-closed' : item.selected == false}" class="">
+            <ul class="nav nav-pills nav-stacked">
+                <!-- ngRepeat: item in item.children | filter:{inmenu:true} --><li role="presentation" ng-repeat="item in item.children | filter:{inmenu:true}" class="ng-scope">
+                    <a ng-class="{'active': item.selected, 'disabled' : item.enabled == false}" href="#/1301" style="cursor: pointer" class="app-menu-page-item ng-binding active" ng-bind-html="toHtmlConverter.getContent(item[labelField])">Conclusion</a>
+                </li><!-- end ngRepeat: item in item.children | filter:{inmenu:true} -->
+            </ul>
+        </div>
+    </div><!-- end ngRepeat: item in data | filter:{inmenu:true} -->
+</div></div>
+                <!-- ngInclude: 'pages/settings.html' --><div id="settings" ng-include="'pages/settings.html'" class="sidebar sidebar-right ng-scope"><div class="ng-scope">
+    <div>
+        <span style="padding-left: 5px; padding-right: 5px; font-size: 2em" class="ng-binding">Settings</span>
+        <button id="helpBtn" class="list-group-item app-setting-item ng-binding">Help<i class="glyphicon pull-right" ng-class="item.selected &amp;&amp; item.isToggle ? 'glyphicon-ok-circle' : ''"></i></button>
+        <button id="glossaryBtn" class="list-group-item app-setting-item ng-binding">Glossary<i class="glyphicon pull-right" ng-class="item.selected &amp;&amp; item.isToggle ? 'glyphicon-ok-circle' : ''"></i></button>
+
+        <div class="btn-group">
+            <button class="btn btn-default btn-md dropdown-toggle app-dropdown-menu-button ng-binding" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Language Options<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" style="min-width: 260px">
+                <li class="dropdown-header">Select a language.</li>
+                <li><a ng-click="setLanguage('en')" class="ng-binding">English</a></li>
+                <li><a ng-click="setLanguage('es')" class="ng-binding">Spanish</a></li>
+            </ul>
+        </div>
+    </div>
+</div></div>
+            </div>
+
+            <!-- ngInclude: helpPage --><div id="help" ng-include="helpPage" onload="helpService.init()" class="ng-scope"><div class="help-dimmer ng-scope"></div>
+<button id="closeHelpBtn" class="glyphicon glyphicon-remove-circle close-btn ng-scope" style="background: none; border: none;"></button>
+<!-- Menu -->
+<div id="helpMenu" class="help-item ng-scope">
+    <h3>Menu</h3>
+    <div class="content">
+        <p class="description">This button gives you access to each page and section in this course. Pages are greyed
+                               out and unavailable until they have been reached. At any point in the course, you may
+                               return to review a previously viewed page.
+        </p>
+    </div>
+    <a class="help-nav-next">NEXT &gt;</a>
+</div>
+
+<!-- Progress -->
+<div id="helpProgressBars" class="help-item ng-scope">
+    <h3>Progress</h3>
+    <div class="content">
+        <p class="description">The two progress bars give you an indication of your current course progress. The top bar
+                               shows your progress on the current page while the bottom bar shows your progress within
+                               the entire course. The black lines indicate each section of the course.
+        </p>
+    </div>
+    <a class="help-nav-next">NEXT &gt;</a>
+</div>
+
+<!-- Navigation -->
+<div id="helpNavigation" class="help-item ng-scope">
+    <h3>Navigation</h3>
+    <div class="content">
+        <p class="description">The course navigation controls which allow you to move between pages
+                               and pause or play pages.
+        </p>
+    </div>
+    <a class="help-nav-next">NEXT &gt;</a>
+</div>
+
+<!-- Settings -->
+<div id="helpSettings" class="help-item ng-scope">
+    <h3>Settings</h3>
+    <div class="content">
+        <p class="description">You can view these tips again, view the course glossary, and access course settings by
+                               selecting this button.
+        </p>
+    </div>
+    <a class="help-nav-next">NEXT &gt;</a>
+</div>
+
+<!-- Page Help -->
+<div id="helpPages" class="help-item ng-scope">
+    <h3>Pages</h3>
+    <div class="content">
+        <p class="description">While a page is being played, a red bar will appear on the left side of the text to
+                               indicate where you are. You are unable to progress to the next page until you have
+                               completed the page you are currently viewing. You are required to view videos in their
+                               entirety on some pages before being allowed to move on.
+        </p>
+    </div>
+    <a class="help-nav-next">NEXT &gt;</a>
+</div></div>
+            <!-- ngInclude: 'pages/glossary.html' --><div id="glossary" ng-include="'pages/glossary.html'" ng-class="{'show fadeIn' : glossaryBtnSelected}" class="ng-scope"><div class="glossary-dimmer ng-scope"></div>
+<button id="closeGlossaryBtn" class="glyphicon glyphicon-remove-circle close-btn ng-scope" style="background: none; border: none;"></button>
+
+<input id="searchInput" class="form-control ng-pristine ng-untouched ng-valid ng-scope" ng-model="searchText.name" placeholder="Search">
+<div class="panel panel-primary glossary-panel-primary ng-scope" style="position: absolute; left: 20px; right: 20px; top: 60px; bottom: 60px">
+    <div class="panel-heading glossary-panel-heading ng-binding">
+         Glossary 
+    </div>
+    <div style="overflow-y: auto; height: 100%;">
+        <!-- ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> 2-second following distance </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">refers to minimum distance needed when following another vehicle</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> 4-second urgent distance </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">refers to the distance needed to react to immediate hazards ahead</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> 12-second anticipation distance </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">refers to the time needed to prepare and respond to factors ahead</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> 360° Awareness </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">perceive factors front, back, left and right</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Accident </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">a
+ pure chance occurrence; an unexpected and undesirable event; most are 
+preventable; preferred term to use instead is crash or collision 
+(changes one’s perception of what really happens; that is, a crash or 
+collision usually involves causative human factors and is not purely a 
+chance happening)</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Alcohol </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">specifically ethyl alcohol, a depressant drug consumed as a beverage</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Anti-lock brakes (ABS) </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> type of braking system that automatically releases braking pressure to prevent skidding</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Apex </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">the middle or sharpest point in your path around a curve </p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> ATGATT </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">All The Gear, All The Time</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> BAC </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">Blood Alcohol Concentration; percentage, by volume, of ethyl alcohol in the blood</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Blind spot </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> area behind or to the side not seen in the mirrors, or area blocked from view by an object</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Braking distance </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">space traveled between brake application and completed stop</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Conspicuity </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">being seen easily by others; to be highly visible</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Contact patch </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">portion of a tire that touches the road surface</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Convex mirrors </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> mirrors designed with an outwardly curved surface; shows more area but objects are closer than they appear in the mirror.</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Countersteer </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ a momentary steering deflection away from the intended direction of 
+travel caused by pressing on the handgrip in the direction of the turn; 
+used to produce a lean and turn in the desired direction; press right 
+handgrip, lean right, go right; press left handgrip, lean left, go left</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Counterweight </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> used primarily in slow, tight turns; rider shifts weight opposite to the lean of the motorcycle</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Crowned road </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">road surface that is higher in the middle for rain runoff</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Decreasing radius </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">refers to a turn or curve that becomes progressively tighter</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> DOT </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ stands for U.S. Department of Transportation; an official DOT label on a
+ helmet indicates a helmet has been manufactured to meet DOT performance
+ standards as required by federal law</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Engine braking </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> slowing by shifting down and easing out the clutch lever to use the engine as a braking force</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Entry speed </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ the speed at the point where the steering input occurs to lean into a 
+turn.  The maximum desired entry speed is one that allows for some 
+throttle roll-on to maintain speed, smoothness and stability.</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Escape Path </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">a path of travel that is open and allows you to avoid a collision</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Factors </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ refers to elements that affect your speed, lane position, or path of 
+travel; factors include traffic controls, road and environment 
+characteristics, other traffic, and yourself</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> FINE-C </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> acronym for the engine pre-start checklist: Fuel valve; Ignition switch; Neutral; Engine cut-off switch; Clutch/Choke</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Friction zone </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ small area of clutch lever movement where power begins to be 
+transmitted to the rear wheel; used to get under way from a stop, to 
+control speed when riding slowly, and to ensure smooth downshifts when 
+engine braking</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Gauntlets </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">refers to the protective part of gloves that extend past the wrist</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Heat exhaustion </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">weakness caused by heat</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> High-side fall </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ fall in which the rider loses control and is thrown to the ground in 
+front of the motorcycle’s path. This type of crash is likely to result 
+in serious injury to the rider and is often the result of releasing the 
+rear brake when a skidding rear tire is not aligned with the front tire</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Hot Spot </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">an area in or near your path of travel that calls for special attention</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Hydroplaning </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">water buildup under the tires resulting in loss of traction</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Hypothermia </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> subnormal body temperature due to the cooling effects of cold and air on exposed skin</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Integrated brakes </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> braking system where use of the rear brake applies partial front brake pressure</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Lane Position </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ a lane can be divided into three general positions: the left third of a
+ lane (LP1), the middle third of a lane (LP2), and the right third of a 
+lane (LP3)</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Legal limit </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ the BAC level a state uses for intoxication.  Currently, 0.08% for 
+adults nationwide, and 0 to 0.02% for minors, depending on the state</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Linked brakes </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> system that applies brake pressure to both brakes when either brake control is applied</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Load triangle </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">area formed by the two axles and the top of the rider’s head</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Lock-up </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> when a wheel stops turning because of too much brake pressure or because of drive train failure or a seized engine</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Lugging </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> rough or jerking operation due to using a gear that is too high for current speed</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Maximum brake pressure </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ application of both brakes simultaneously to a point just short of 
+skidding; threshold braking (also applies to use of individual brakes)</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> MOM </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">Motorcycle Owner’s Manual</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> No-Zone </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">the area around a truck or other vehicle that is a blind spot</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Open Up the View </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> to be in a position to see and be seen at an intersection stop; may require more than one stop</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Overriding the headlight </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> riding at a speed at night where total stopping distance exceeds the sight distance of headlight illumination</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Perception distance </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">space traveled from when a hazard is present to when it is first noticed</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Peripheral vision </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">area to the sides that can be seen while looking straight ahead</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Presentation </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">use a lane position to see and be seen by opposing traffic</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Reaction distance </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">space traveled between perceiving a hazard and taking action</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Red zone </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">the area (or line) on a tachometer that indicates maximum safe engine speed</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Reflective or retro-reflective </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">ability of a surface to reflect light</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Respond vs. React </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> refers to responding smoothly to hazards ahead of time instead of reacting to an emergency at the last possible moment</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Rev </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">causing the engine rpm to increase by applying throttle</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Rider Character </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">choosing to do the right thing – safe and responsible behavior</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> RiderRadar </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ refers to searching near and far and from side to side. The three 
+lead-times of RiderRadar are: a 2-second following distance, a 4-second 
+urgent distance, and a 12-second anticipation distance; keep the eyes 
+moving and mind thinking</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Ride Your Own Ride </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ honestly assess your own capabilities and limitations and take action 
+within those limits.  Avoid peer pressure to ride beyond current skill 
+level or state of mind</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Risk Offset </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ Good risk offset is when skill exceeds risk.  Bad risk offset is when 
+risk exceeds skill.  Wise riders make sure they have plenty of good risk
+ offset</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Roundabout </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> a circular intersection designed for efficient traffic flow; sometimes called a traffic circle</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Search-Setup-Smooth </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> a cornering strategy that may include the action steps of Slow, Look, Press, and Roll</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> SEE </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> an acronym for MSF’s recommended dynamic strategy to see and be seen: Search-Evaluate-Execute</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Separate </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> making speed or position changes to meet potential hazards at different points in time</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Space cushion </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">having distance between you and hazards; keep space around you open</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Square the handlebars </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> refers to centering the steering with the motorcycle upright and pointing in a straight line</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Tailgating </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">following at a distance of less than two seconds</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Target fixation </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> to focus on something too long; to look at an object you are trying to avoid, which may result in failing to avoid the object</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Threshold braking </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">using the brakes fully without producing a skid</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Total stopping distance </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> refers to the combined distances of perception distance, reaction distance, and braking distance</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Traffic-actuated traffic light </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> signal lights at intersections where sensors recognize the presence of a vehicle to trigger the light to change</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Trap </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> a situation to avoid where you may not have a space cushion or an escape path</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Tread </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">the pattern molded into the face of a tire to help displace water</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> T-CLOCS </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ an acronym for the motorcycle pre-ride inspection checklist (Tires and 
+Wheels; Controls; Lights and Electrics; Oil and other fluids, Chassis; 
+Stands)</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Visibility </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">ability to see; also used to refer to the characteristic of being seen (conspicuity)</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Visual lead times </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">
+ part of a strategy in using the eyes and mind to reduce and manage 
+risk; 2-second following distance; 4-second urgent distance; 12-second 
+anticipated distance</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Visual Perception </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">to use the eyes and mind to see and understand accurately</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Wear bar </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">a tread indication molded into the tire to show when a tire is worn out</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Weave </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition">a relatively slow oscillation of the rear of the motorcycle</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Wheel lock </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> refers to braking so hard the wheel stops turning and the tire skids; may also be caused by mechanical issues</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText --><div ng-repeat="item in glossary.list | filter:searchText" class="ng-scope">
+            <div class="list-group-item glossary-item">
+                <h4 class="list-group-item-heading ng-binding"> Wobble </h4>
+                <p class="list-group-item-text ng-binding" ng-bind-html="item.definition"> a rapid oscillation of the front wheel and steering components usually due to a mechanical problem</p>
+            </div>
+        </div><!-- end ngRepeat: item in glossary.list | filter:searchText -->
+    </div>
+</div></div>
+
+            <!--[if lt IE 10]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+            <![endif]-->
+
+            <div id="appContent" class="app-content">
+                <!-- ngView:  --><div ng-view="" data-ng-click="onContentClick()" class="ng-scope"><span ng-init="pc = true; engineApi.pageComplete()" class="ng-scope"></span>
+<!-- build:remove:street -->
+<div ng-transclude="" class="container-fluid app-content-container ng-scope ng-isolate-scope" cm-page-audio-player="" src="assets/audio/en/130101.mp3" autoplay="autoplay" finish-callback="engineApi.pageComplete(); pc = true;" update-callback="uiApi.updatePageProgress({progress:progress})" playing-callback="engineApi.contentStarted()">
+    <div ng-transclude="" cue-manager="" class="ng-scope ng-isolate-scope">
+        <div class="row content-block ng-scope" style="background-color: white">
+            <div class="col-sm-12 col-md-6 col-lg-6 move-right-in-animation">
+                <img class="img-responsive app-image" src="index_data/130101.jpg" width="100%">
+            </div>
+
+            <div class="col-sm-12 col-md-6 col-lg-6 content-block-text">
+                <div ng-transclude="" cue-item="" class="cue-text ng-isolate-scope" time="1">
+                    <strong class="ng-scope">Congratulations on completing the e<i>Course</i> portion of the Basic <i>RiderCourse</i>!</strong>
+                </div>
+                <br>
+                <div ng-transclude="" cue-item="" class="cue-text ng-isolate-scope" time="6"><span class="ng-scope">
+                    If you are taking this e</span><i class="ng-scope">Course</i><span class="ng-scope"> as part of a complete Basic </span><i class="ng-scope">RiderCourse</i><span class="ng-scope">,
+ be sure to select the icon shown in the corner of the screen to print 
+your certificate and bring it with you to your first class meeting.
+                </span></div>
+                <br>
+                <div ng-transclude="" cue-item="" class="cue-text ng-isolate-scope" time="18"><span class="ng-scope">
+                    Thank you for participating!
+                </span></div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /build -->
+<!-- ngInclude: 'pages/en/conclusion-message.html' --><div ng-include="'pages/en/conclusion-message.html'" ng-show="pc" class="ng-scope"><div class="video-message video-message-animation ng-scope" style="background: none; animation-duration: 20s; -webkit-animation-duration: 20s;">
+    <div>
+        <div id="conclusion-help" style="background-color: #007aff;">
+            <p style="display: block; padding: 10px; margin-bottom: 0; text-align: center;"><span class="glyphicon glyphicon-exclamation-sign"></span> Click here to download your certificate PDF. (You must disable your popup blocker to download the PDF.)</p>
+        </div>
+    </div>
+</div></div></div>
+            </div>
+
+            <div ng-show="loading" class="app-content-loading ng-hide" style="position: absolute; pointer-events: all;">
+                <img class="loading-spinner" src="index_data/loader.gif" width="32" height="32">
+            </div>
+
+            <!-- ngIf: showBookmarkError -->
+        </div>
+
+        <script src="index_data/jquery.js"></script>
+        <script src="index_data/bootstrap.js"></script>
+        <script src="index_data/angular.js"></script>
+        <script src="index_data/angular-route.js"></script>
+        <script src="index_data/angular-sanitize.js"></script>
+        <script src="index_data/libs.js"></script>
+        <script src="index_data/main.js"></script>
+    
+</body></html>
