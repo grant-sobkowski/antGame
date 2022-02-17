@@ -2,6 +2,8 @@ import 'phaser';
 import Button from './components/button.js';
 import playButton from './img/playButton.png';
 import background from './img/background_sand.png';
+import titleArt from './img/antGame_titleArt.png';
+import scoreButton from './img/antGame_trophy.png';
 
 export default class titleScreen extends Phaser.Scene{
     constructor(){
@@ -17,9 +19,11 @@ export default class titleScreen extends Phaser.Scene{
         this.load.bitmapFont('minecraftFont', './src/assets/minecraftFont.png', './src/assets/minecraftFont.xml');
         this.load.image('playButton', playButton);
         this.load.image('background', background);
+        this.load.image('titleArt', titleArt);
+        this.load.image('scoreButton', scoreButton);
     }
     create(){
-        let sandImage = this.add.image(10, 10, 'background');
+        let sandImage = this.add.image(0, 0, 'titleArt');
         this.plugins.get('rexanchorplugin').add(sandImage, {
             left: 'left+0',
             top: 'top+0',
@@ -35,12 +39,19 @@ export default class titleScreen extends Phaser.Scene{
         const screenCenterX = 640;
         const screenCenterY = 360;
         //add button here
-        this.add.bitmapText(400, 100, 'minecraftFont', 'Ant Simulation');
         console.log('working titleScene!');
-        let playButton = this.add.sprite(640, 360, 'playButton').setInteractive();
+        let playButton = this.add.image(640, 600, 'playButton').setInteractive();
+        let scoreButton = this.add.sprite(1240, 30, 'scoreButton').setInteractive();
         playButton.on('pointerdown', ()=>{
             this.scene.start("gameScene");
         })
+        playButton.on('pointerover', ()=>playButton.setTint(0x03a8f4));
+        playButton.on('pointerout', ()=>playButton.clearTint());
+        scoreButton.on('pointerdown', ()=>{
+            this.scene.start("endScene", {isLeaderboard: true});
+        })
+        scoreButton.on('pointerover', ()=>scoreButton.setTint(0x03a8f4));
+        scoreButton.on('pointerout', ()=>scoreButton.clearTint());
 
     }
     spawnInstructions(){

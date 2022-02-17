@@ -122,10 +122,13 @@ export default class gameScene extends Phaser.Scene{
         TweenHelper.flashElement(this, this.instructions);
         this.sliderTxt = this.add.bitmapText(320, 656, 'minecraftFont', "10 Seconds", 20);
         this.scroller = this.createSlider(this.sliderTxt);
-        this.startButton = this.add.sprite(1000, 665, 'startButton').setInteractive();
-        this.startButton.on('pointerdown', ()=>{
+        let startButton = this.add.sprite(1000, 665, 'startButton').setInteractive();
+        startButton.on('pointerdown', ()=>{
             this.startSim();
         })
+        startButton.on('pointerover', ()=>startButton.setTint(0x03a8f4));
+        startButton.on('pointerout', ()=>startButton.clearTint());
+        this.startButton = startButton;
     }
     destroyInputContainer(){
         this.box.destroy();
@@ -452,7 +455,7 @@ export default class gameScene extends Phaser.Scene{
         if(this.foodHP <= 0 || !command){
             let gTime = this.roundDec(self.guessTime, 2);
             let elapsedTime = (this.time.now - this.sceneStartTime)/100;
-            this.scene.start("endScene", {guessTime: gTime, elapsedTime: elapsedTime});
+            this.scene.start("endScene", {guessTime: gTime, elapsedTime: elapsedTime, isLeaderboard: false});
         }
         // TODO update score graphic
     }

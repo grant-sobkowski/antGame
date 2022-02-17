@@ -12,6 +12,7 @@ import rub from './img/p_rub.png';
 import end from './img/p_end.png';
 import rightButton from './img/right_button4.png';
 import leftButton from './img/left_button.png';
+import leaderboardBanner from './img/antGame_bannerThin.png';
 
 export default class endScene extends Phaser.Scene{
     constructor(){
@@ -26,6 +27,7 @@ export default class endScene extends Phaser.Scene{
     init(data){
     //data variable passes information from gameScene
     var self = this;
+    this.isLeaderboardVal = data.isLeaderboard;
     self.guessTime = data.guessTime;
     this.elapsedTime = data.elapsedTime;
     
@@ -44,6 +46,7 @@ export default class endScene extends Phaser.Scene{
         this.load.image('end', end);
         this.load.image('rightButton', rightButton);
         this.load.image('leftButton', leftButton);
+        this.load.image('banner', leaderboardBanner);
     }
     create(){
         let sandImage = this.add.image(10, 10, 'background');
@@ -59,20 +62,22 @@ export default class endScene extends Phaser.Scene{
             },
             onResizeCallbackScope: sandImage
         });
-        let date = new Date();
-        let score = Math.round(Math.min(self.guessTime, this.elapsedTime)/Math.max(self.guessTime, this.elapsedTime) * 1000000);
-        this.newScore = {
-                'score' : score,
-                'date' : date,
-                'name': "GMS"
-        }
-        let newScore = this.newScore;
         this.screenCenterX = 640;
         this.screenCenterY = 360;
         this.page = 1;
         this.prevPage = null;
         this.pageNum = null;
-        this.spawnScore(newScore, score);
+        if(this.isLeaderboard(this.isLeaderboardVal) === false){
+            let date = new Date();
+            let score = Math.round(Math.min(self.guessTime, this.elapsedTime)/Math.max(self.guessTime, this.elapsedTime) * 1000000);
+            this.newScore = {
+                    'score' : score,
+                    'date' : date,
+                    'name': "GMS"
+            }
+            let newScore = this.newScore;
+            this.spawnScore(newScore, score);
+        }
     }
     async getScores(data = {}){
         try{
@@ -103,6 +108,13 @@ export default class endScene extends Phaser.Scene{
             return -1;
         }
     }
+    isLeaderboard(bool){
+        if(bool){
+            this.spawnLeaderboard();
+            return true;
+        }
+        return false;
+    }
     //TODO Create function to store top 10 scores in localStorage
     //Keys stored as 1-10
     //Function tries to read keys 10-1, if one or more is missing, add score to appropriate position without removing any
@@ -118,6 +130,8 @@ export default class endScene extends Phaser.Scene{
             this.destroyElems(s1, s2, s3, s4, nextButton);
             this.spawnNameInput(newScore);
         })
+        nextButton.on('pointerover', ()=>nextButton.setTint(0x03a8f4));
+        nextButton.on('pointerout', ()=>nextButton.clearTint());
     }
     async spawnNameInput(newScore){
         try{
@@ -147,11 +161,13 @@ export default class endScene extends Phaser.Scene{
             b2.on('pointerdown', async ()=>{
                 //TODO: Require name input
                 await this.postScore(this.newScore);
-                scores = await this.getScores();
-                scores = scores.sort((a, b)=> b.score - a.score);
                 this.destroyElems(prompt, h1, h2, h3, this.nameText, g2, g3, input, b1, b2)
-                this.spawnLeaderboard(scores)
+                this.spawnLeaderboard();
             });
+            b1.on('pointerover', ()=>b1.setTint(0x03a8f4));
+            b1.on('pointerout', ()=>b1.clearTint());
+            b2.on('pointerover', ()=>b2.setTint(0x03a8f4));
+            b2.on('pointerout', ()=>b2.clearTint());
             let input = new NameInput(this, this.screenCenterX-264, 400);
             input.spawn();
     
@@ -169,30 +185,39 @@ export default class endScene extends Phaser.Scene{
         this.newScore.name = name;
     }
     //creates Leaderboard
-    async spawnLeaderboard(scores){
-        let rank = this.add.bitmapText(this.screenCenterX-300, 100, 'minecraftFont', 'Rank', 50).setOrigin(.5);
-        let score = this.add.bitmapText(this.screenCenterX-100, 100, 'minecraftFont', 'Score', 50).setOrigin(.5);
-        let playerName = this.add.bitmapText(this.screenCenterX+100, 100, 'minecraftFont', 'Name', 50).setOrigin(0.5);
-        let date = this.add.bitmapText(this.screenCenterX+300, 100, 'minecraftFont', 'Date', 50).setOrigin(.5);
+    async spawnLeaderboard(){
+        let scores = await this.getScores();
+        scores = scores.sort((a, b)=> b.score - a.score);
+        let rank = this.add.bitmapText(this.screenCenterX-300, 122, 'minecraftFont', 'Rank', 38).setOrigin(.5);
+        let score = this.add.bitmapText(this.screenCenterX-100, 122, 'minecraftFont', 'Score', 38).setOrigin(.5);
+        let playerName = this.add.bitmapText(this.screenCenterX+100, 122, 'minecraftFont', 'Name', 38).setOrigin(0.5);
+        let date = this.add.bitmapText(this.screenCenterX+300, 122, 'minecraftFont', 'Date', 38).setOrigin(.5);
         // let scoresList = this.getList(newScore);
         // this.updateList(scoresList);
         // this.renderList(scoresList, this);
         let pageNum = Math.ceil(scores.length/10);
         this.pageNum = pageNum;
-        this.pageCounter = this.add.bitmapText(this.screenCenterX, 580, 'minecraftFont', this.page+"/"+pageNum, 25).setOrigin(0.5);
-        let rb = this.add.sprite(this.screenCenterX + 65, 580, 'rightButton').setInteractive();
-        let lb = this.add.sprite(this.screenCenterX - 65, 580, 'leftButton').setInteractive();
+        this.pageCounter = this.add.bitmapText(this.screenCenterX, 590, 'minecraftFont', this.page+"/"+pageNum, 25).setOrigin(0.5);
+        let rb = this.add.sprite(this.screenCenterX + 65, 590, 'rightButton').setInteractive();
+        let lb = this.add.sprite(this.screenCenterX - 65, 590, 'leftButton').setInteractive();
         
         this.prevPage = this.renderList(scores, this);
 
         rb.on('pointerdown', ()=>this.incPage(pageNum, scores));
+        rb.on('pointerover', ()=>rb.setTint(0x03a8f4));
+        rb.on('pointerout', ()=>rb.clearTint());
         lb.on('pointerdown', ()=>this.decPage(pageNum, scores));
+        lb.on('pointerover', ()=>lb.setTint(0x03a8f4));
+        lb.on('pointerout', ()=>lb.clearTint());
 
 
-        this.homeButton = this.add.sprite(this.screenCenterX, 650, 'homeButton').setInteractive();
-        this.homeButton.on('pointerdown', ()=>{
+        let banner = this.add.image(this.screenCenterX, 50, 'banner').setOrigin(0.5);
+        let homeButton = this.add.sprite(this.screenCenterX, 650, 'homeButton').setInteractive();
+        homeButton.on('pointerdown', ()=>{
             this.scene.start("titleScreen");
         })
+        homeButton.on('pointerover', ()=>homeButton.setTint(0x03a8f4));
+        homeButton.on('pointerout', ()=>homeButton.clearTint());
     }
     renderList(scores, scene){
         let pageScores = scores.slice(10*(this.page-1), ((10*(this.page-1))+10));
@@ -200,13 +225,13 @@ export default class endScene extends Phaser.Scene{
         console.log(`page scores = ${pageScores}`);
         let ldbdObjArr = [];
         for(let i=0; i<pageScores.length; i++){
-            let a = scene.add.bitmapText(this.screenCenterX-300, 160 + i*40, 'minecraftFont', i+(10*(this.page-1))+1, 30).setOrigin(0.5);
-            let b = scene.add.bitmapText(this.screenCenterX-100, 160 + i*40, 'minecraftFont', pageScores[i].score, 30).setOrigin(0.5);
-            let c = scene.add.bitmapText(this.screenCenterX+100, 160 + i*40, 'minecraftFont', pageScores[i].name, 30).setOrigin(0.5);
+            let a = scene.add.bitmapText(this.screenCenterX-300, 170 + i*40, 'minecraftFont', i+(10*(this.page-1))+1, 30).setOrigin(0.5);
+            let b = scene.add.bitmapText(this.screenCenterX-100, 170 + i*40, 'minecraftFont', pageScores[i].score, 30).setOrigin(0.5);
+            let c = scene.add.bitmapText(this.screenCenterX+100, 170 + i*40, 'minecraftFont', pageScores[i].name, 30).setOrigin(0.5);
             let mm = pageScores[i].date.slice(5,7);
             let yy = pageScores[i].date.slice(2,4);
             let dd = pageScores[i].date.slice(8,10);
-            let d = scene.add.bitmapText(this.screenCenterX+300, 160 + i*40, 'minecraftFont', mm + '/' + dd + '/' + yy, 30).setOrigin(0.5);
+            let d = scene.add.bitmapText(this.screenCenterX+300, 170 + i*40, 'minecraftFont', mm + '/' + dd + '/' + yy, 30).setOrigin(0.5);
             ldbdObjArr.push(a, b, c, d);
         }
         return(ldbdObjArr);
