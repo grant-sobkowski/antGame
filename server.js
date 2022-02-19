@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 var path = require('path');
 
-dotenv.config();
+// dotenv.config();
 mongoose.connect(process.env.DATABASE_URI, {useNewUrlParser: true})
 const db = mongoose.connection;
 
