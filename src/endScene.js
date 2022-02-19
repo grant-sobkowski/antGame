@@ -77,7 +77,7 @@ export default class endScene extends Phaser.Scene{
     }
     async getScores(data = {}){
         try{
-            let response = await fetch('http://localhost:3000/leaderboard');
+            let response = await fetch('https://ant-game.herokuapp.com/leaderboard');
             let strVal = await response.json();
             console.log(strVal);
             return(strVal);
@@ -95,7 +95,7 @@ export default class endScene extends Phaser.Scene{
                 },
                 body: JSON.stringify(newScore) // body data type must match "Content-Type" header
             }
-            let rawResp = await fetch('http://localhost:3000/leaderboard', configObj);
+            let rawResp = await fetch('https://ant-game.herokuapp.com/leaderboard', configObj);
             // console.log(rawResp);
             console.log("post status = " + rawResp.status);
             return 1;
