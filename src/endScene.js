@@ -30,8 +30,6 @@ export default class endScene extends Phaser.Scene{
     this.isLeaderboardVal = data.isLeaderboard;
     self.guessTime = data.guessTime;
     this.elapsedTime = data.elapsedTime;
-    
-    console.log(data);
     }
     preload(){
         this.load.plugin('rexanchorplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexanchorplugin.min.js', true);
@@ -98,7 +96,7 @@ export default class endScene extends Phaser.Scene{
                 body: JSON.stringify(newScore) // body data type must match "Content-Type" header
             }
             let rawResp = await fetch('http://localhost:3000/leaderboard', configObj);
-            console.log(rawResp);
+            // console.log(rawResp);
             console.log("post status = " + rawResp.status);
             return 1;
         }catch(e){
@@ -219,8 +217,8 @@ export default class endScene extends Phaser.Scene{
     }
     renderList(scores, scene){
         let pageScores = scores.slice(10*(this.page-1), ((10*(this.page-1))+10));
-        console.log("page = " + this.page);
-        console.log(`page scores = ${pageScores}`);
+        // console.log("page = " + this.page);
+        // console.log(`page scores = ${pageScores}`);
         let ldbdObjArr = [];
         for(let i=0; i<pageScores.length; i++){
             let a = scene.add.bitmapText(this.screenCenterX-300, 170 + i*40, 'MinecraftFont', i+(10*(this.page-1))+1, 30).setOrigin(0.5);

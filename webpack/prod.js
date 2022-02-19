@@ -13,7 +13,7 @@ module.exports = merge(base, {
       assets: path.join(__dirname, '../src/assets'),
     },
   },
-  devtool: "eval-source-map",
+  devtool: false,
   performance: {
     maxEntrypointSize: 900000,
     maxAssetSize: 900000

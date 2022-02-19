@@ -147,7 +147,7 @@ export default class gameScene extends Phaser.Scene{
     }
     startSim(){
 
-        console.log('startSim() called!');
+        // console.log('startSim() called!');
         //spawns ants, timer, and despawns config stuff.
         //spawns ants
         this.destroyInputContainer();
@@ -205,7 +205,7 @@ export default class gameScene extends Phaser.Scene{
             //     x = this.getRandomInt(1150);
             //     y = this.getRandomInt(650);
             // }
-            console.log(`boulder spawned at ${x}, ${y}`);
+            // console.log(`boulder spawned at ${x}, ${y}`);
             let newBoulder = this.boulders.create(x, y, 'boulder')
             .setScale(.25)
             .setBodySize(65, 63)
@@ -220,7 +220,7 @@ export default class gameScene extends Phaser.Scene{
           boulder.body.reset(boulder.x, boulder.y + y);
           boulder.setOffset(163, 193);
 
-          console.log('Moved boulder down by ' -y);
+        //   console.log('Moved boulder down by ' -y);
         });
     }
     checkOverlap(arrX, arrY, x, y){
@@ -507,7 +507,7 @@ export default class gameScene extends Phaser.Scene{
         }
         if(ant.getData('mode')==='randomTraj'){
             if(marker.getData('isToFood')){
-                console.log('randomTraj ant hit toFood marker! new marker = ' + marker.x + ' ' + marker. y);
+                // console.log('randomTraj ant hit toFood marker! new marker = ' + marker.x + ' ' + marker. y);
                 this.antGroupWithFood.add(ant);
                 ant.setData({'mode': 'toFood', 'nextMark': marker});
             }

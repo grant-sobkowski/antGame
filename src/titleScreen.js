@@ -27,7 +27,7 @@ export default class titleScreen extends Phaser.Scene{
     create(){
     this.loader.start(AssetManifest);
     this.loader.systems.events.on('load', (file) => {
-        console.log('File loaded!', file);
+        // console.log('File loaded!', file);
       });
     this.loader.load().then(() => {
           // Done loading!
@@ -48,7 +48,7 @@ export default class titleScreen extends Phaser.Scene{
         const screenCenterX = 640;
         const screenCenterY = 360;
         //add button here
-        console.log('working titleScene!');
+        // console.log('working titleScene!');
         let playButton = this.add.image(640, 600, 'playButton').setInteractive();
         let scoreButton = this.add.sprite(1240, 30, 'scoreButton').setInteractive();
         playButton.on('pointerdown', ()=>{
