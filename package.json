@@ -4,8 +4,10 @@
   "description": "A Phaser 3 Project Template",
   "main": "src/index.js",
   "scripts": {
+    "start": "node server.js",
     "build": "webpack --config webpack/prod.js ",
-    "start": "webpack-dev-server --config webpack/base.js --open"
+    "dev-server": "node devServer.js",
+    "dev": "webpack-dev-server --config webpack/base.js --open"
   },
   "repository": {
     "type": "git",
@@ -35,7 +37,11 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "mongoose": "^6.2.2",
     "phaser": "^3.55.2",
+    "phaser-webpack-loader": "^2.0.0",
     "phaser3-rex-plugins": "^1.1.65"
   }
 }

@@ -4,25 +4,34 @@ import playButton from './img/playButton.png';
 import background from './img/background_sand.png';
 import titleArt from './img/antGame_titleArt.png';
 import scoreButton from './img/antGame_trophy.png';
+import WebpackLoader from 'phaser-webpack-loader';
+import AssetManifest from '../AssetManifest';
 
 export default class titleScreen extends Phaser.Scene{
     constructor(){
         super('titleScreen');
     }
     preload(){
+        this.load.scenePlugin('WebpackLoader', WebpackLoader, 'loader', 'loader');
         this.load.plugin('rexanchorplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexanchorplugin.min.js', true);
         this.load.scenePlugin({
             key: 'rexuiplugin',
             url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
             sceneKey: 'rexUI'
-        });  
-        this.load.bitmapFont('minecraftFont', './src/assets/minecraftFont.png', './src/assets/minecraftFont.xml');
+        });
         this.load.image('playButton', playButton);
         this.load.image('background', background);
         this.load.image('titleArt', titleArt);
         this.load.image('scoreButton', scoreButton);
     }
     create(){
+    this.loader.start(AssetManifest);
+    this.loader.systems.events.on('load', (file) => {
+        console.log('File loaded!', file);
+      });
+    this.loader.load().then(() => {
+          // Done loading!
+
         let sandImage = this.add.image(0, 0, 'titleArt');
         this.plugins.get('rexanchorplugin').add(sandImage, {
             left: 'left+0',
@@ -52,7 +61,7 @@ export default class titleScreen extends Phaser.Scene{
         })
         scoreButton.on('pointerover', ()=>scoreButton.setTint(0x03a8f4));
         scoreButton.on('pointerout', ()=>scoreButton.clearTint());
-
+    });
     }
     spawnInstructions(){
         var dialog = this.rexUI.add.dialog({

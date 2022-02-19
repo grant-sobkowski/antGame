@@ -35,8 +35,6 @@ export default class endScene extends Phaser.Scene{
     }
     preload(){
         this.load.plugin('rexanchorplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexanchorplugin.min.js', true);
-        this.load.bitmapFont('minecraftFont', './src/assets/minecraftFont.png', './src/assets/minecraftFont.xml');
-        this.load.bitmapFont('arcadeFont', './src/assets/gamecom_font.png', './src/assets/gamecom_font.xml');
         this.load.image('nextButton', nextButton);
         this.load.image('nextButton_small', nextButtonSm);
         this.load.image('background', background);
@@ -120,11 +118,11 @@ export default class endScene extends Phaser.Scene{
     //Function tries to read keys 10-1, if one or more is missing, add score to appropriate position without removing any
     //If 10 scores, sort list and remove bottom one
     spawnScore(newScore, score){
-        let s1 = this.add.bitmapText(this.screenCenterX, 150, 'minecraftFont', 'Game Over!').setOrigin(0.5);
+        let s1 = this.add.bitmapText(this.screenCenterX, 150, 'MinecraftFont', 'Game Over!').setOrigin(0.5);
         TweenHelper.flashElement(this, s1);
-        let s2 = this.add.bitmapText(this.screenCenterX, 245, 'minecraftFont', 'Estimated Time: ' + Math.round(self.guessTime), 30).setOrigin(0.5);
-        let s3 = this.add.bitmapText(this.screenCenterX, 285, 'minecraftFont', 'Elapsed Time: ' + Math.round(this.elapsedTime), 30).setOrigin(0.5);
-        let s4 = this.add.bitmapText(this.screenCenterX, 325, 'minecraftFont', 'Score: ' + score, 30).setOrigin(0.5);
+        let s2 = this.add.bitmapText(this.screenCenterX, 245, 'MinecraftFont', 'Estimated Time: ' + Math.round(self.guessTime), 30).setOrigin(0.5);
+        let s3 = this.add.bitmapText(this.screenCenterX, 285, 'MinecraftFont', 'Elapsed Time: ' + Math.round(this.elapsedTime), 30).setOrigin(0.5);
+        let s4 = this.add.bitmapText(this.screenCenterX, 325, 'MinecraftFont', 'Score: ' + score, 30).setOrigin(0.5);
         let nextButton = this.add.sprite(this.screenCenterX, 420, 'nextButton').setInteractive().setScale(.6).setOrigin(0.5);
         nextButton.on('pointerdown', ()=>{
             this.destroyElems(s1, s2, s3, s4, nextButton);
@@ -144,15 +142,15 @@ export default class endScene extends Phaser.Scene{
             }
             newScore.rank = count + 1;
 
-            let prompt = this.add.bitmapText(this.screenCenterX, 244, 'minecraftFont', 'Enter Your Name:', 40).setOrigin(0.5);
+            let prompt = this.add.bitmapText(this.screenCenterX, 244, 'MinecraftFont', 'Enter Your Name:', 40).setOrigin(0.5);
             TweenHelper.flashElement(this, prompt);
     
-            let h1 = this.add.bitmapText(this.screenCenterX - 240, 80, 'minecraftFont', 'Rank', 38).setOrigin(0.5);
-            let h2 = this.add.bitmapText(this.screenCenterX, 80, 'minecraftFont', 'Score', 38).setOrigin(0.5);
-            let h3 = this.add.bitmapText(this.screenCenterX + 240, 80, 'minecraftFont', 'Name', 38).setOrigin(0.5);
-            this.nameText = this.add.bitmapText(this.screenCenterX + 240, 130, 'minecraftFont', '', 28).setOrigin(0.5);
-            let g2 = this.add.bitmapText(this.screenCenterX, 130, 'minecraftFont', newScore.score, 28).setOrigin(0.5);
-            let g3 = this.add.bitmapText(this.screenCenterX - 240, 130, 'minecraftFont', newScore.rank, 28).setOrigin(0.5);
+            let h1 = this.add.bitmapText(this.screenCenterX - 240, 80, 'MinecraftFont', 'Rank', 38).setOrigin(0.5);
+            let h2 = this.add.bitmapText(this.screenCenterX, 80, 'MinecraftFont', 'Score', 38).setOrigin(0.5);
+            let h3 = this.add.bitmapText(this.screenCenterX + 240, 80, 'MinecraftFont', 'Name', 38).setOrigin(0.5);
+            this.nameText = this.add.bitmapText(this.screenCenterX + 240, 130, 'MinecraftFont', '', 28).setOrigin(0.5);
+            let g2 = this.add.bitmapText(this.screenCenterX, 130, 'MinecraftFont', newScore.score, 28).setOrigin(0.5);
+            let g3 = this.add.bitmapText(this.screenCenterX - 240, 130, 'MinecraftFont', newScore.rank, 28).setOrigin(0.5);
             let b1 = this.add.sprite(this.screenCenterX - 100, 640, 'homeButton').setOrigin(0.5);
             let b2 = this.add.sprite(this.screenCenterX + 100, 640, 'nextButton_small').setOrigin(0.5);
             b1.setInteractive();
@@ -188,16 +186,16 @@ export default class endScene extends Phaser.Scene{
     async spawnLeaderboard(){
         let scores = await this.getScores();
         scores = scores.sort((a, b)=> b.score - a.score);
-        let rank = this.add.bitmapText(this.screenCenterX-300, 122, 'minecraftFont', 'Rank', 38).setOrigin(.5);
-        let score = this.add.bitmapText(this.screenCenterX-100, 122, 'minecraftFont', 'Score', 38).setOrigin(.5);
-        let playerName = this.add.bitmapText(this.screenCenterX+100, 122, 'minecraftFont', 'Name', 38).setOrigin(0.5);
-        let date = this.add.bitmapText(this.screenCenterX+300, 122, 'minecraftFont', 'Date', 38).setOrigin(.5);
+        let rank = this.add.bitmapText(this.screenCenterX-300, 122, 'MinecraftFont', 'Rank', 38).setOrigin(.5);
+        let score = this.add.bitmapText(this.screenCenterX-100, 122, 'MinecraftFont', 'Score', 38).setOrigin(.5);
+        let playerName = this.add.bitmapText(this.screenCenterX+100, 122, 'MinecraftFont', 'Name', 38).setOrigin(0.5);
+        let date = this.add.bitmapText(this.screenCenterX+300, 122, 'MinecraftFont', 'Date', 38).setOrigin(.5);
         // let scoresList = this.getList(newScore);
         // this.updateList(scoresList);
         // this.renderList(scoresList, this);
         let pageNum = Math.ceil(scores.length/10);
         this.pageNum = pageNum;
-        this.pageCounter = this.add.bitmapText(this.screenCenterX, 590, 'minecraftFont', this.page+"/"+pageNum, 25).setOrigin(0.5);
+        this.pageCounter = this.add.bitmapText(this.screenCenterX, 590, 'MinecraftFont', this.page+"/"+pageNum, 25).setOrigin(0.5);
         let rb = this.add.sprite(this.screenCenterX + 65, 590, 'rightButton').setInteractive();
         let lb = this.add.sprite(this.screenCenterX - 65, 590, 'leftButton').setInteractive();
         
@@ -225,13 +223,13 @@ export default class endScene extends Phaser.Scene{
         console.log(`page scores = ${pageScores}`);
         let ldbdObjArr = [];
         for(let i=0; i<pageScores.length; i++){
-            let a = scene.add.bitmapText(this.screenCenterX-300, 170 + i*40, 'minecraftFont', i+(10*(this.page-1))+1, 30).setOrigin(0.5);
-            let b = scene.add.bitmapText(this.screenCenterX-100, 170 + i*40, 'minecraftFont', pageScores[i].score, 30).setOrigin(0.5);
-            let c = scene.add.bitmapText(this.screenCenterX+100, 170 + i*40, 'minecraftFont', pageScores[i].name, 30).setOrigin(0.5);
+            let a = scene.add.bitmapText(this.screenCenterX-300, 170 + i*40, 'MinecraftFont', i+(10*(this.page-1))+1, 30).setOrigin(0.5);
+            let b = scene.add.bitmapText(this.screenCenterX-100, 170 + i*40, 'MinecraftFont', pageScores[i].score, 30).setOrigin(0.5);
+            let c = scene.add.bitmapText(this.screenCenterX+100, 170 + i*40, 'MinecraftFont', pageScores[i].name, 30).setOrigin(0.5);
             let mm = pageScores[i].date.slice(5,7);
             let yy = pageScores[i].date.slice(2,4);
             let dd = pageScores[i].date.slice(8,10);
-            let d = scene.add.bitmapText(this.screenCenterX+300, 170 + i*40, 'minecraftFont', mm + '/' + dd + '/' + yy, 30).setOrigin(0.5);
+            let d = scene.add.bitmapText(this.screenCenterX+300, 170 + i*40, 'MinecraftFont', mm + '/' + dd + '/' + yy, 30).setOrigin(0.5);
             ldbdObjArr.push(a, b, c, d);
         }
         return(ldbdObjArr);

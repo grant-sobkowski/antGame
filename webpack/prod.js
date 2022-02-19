@@ -8,7 +8,12 @@ module.exports = merge(base, {
   output: {
     filename: "bundle.min.js"
   },
-  devtool: false,
+  resolve: {
+    alias: {
+      assets: path.join(__dirname, '../src/assets'),
+    },
+  },
+  devtool: "eval-source-map",
   performance: {
     maxEntrypointSize: 900000,
     maxAssetSize: 900000

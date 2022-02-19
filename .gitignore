@@ -10,5 +10,8 @@ Thumbs.db
 node_modules/
 
 # Build
-dist/
 /npm-debug.log
+
+# Dev artifacts
+.env
+devServer.js

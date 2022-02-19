@@ -29,7 +29,7 @@ export default class gameScene extends Phaser.Scene{
     preload(){
         this.load.scenePlugin({
             key: 'rexuiplugin',
-            url: './src/rexuiplugin.min.js',
+            url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
             sceneKey: 'rexUI'
         });
         this.load.plugin('rexanchorplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexanchorplugin.min.js', true);
@@ -111,16 +111,16 @@ export default class gameScene extends Phaser.Scene{
         this.graphics.strokeRoundedRect(535, 0, 200, 80, 5);
         this.graphics.lineStyle(2, 0x000000, 1);
         this.graphics.fillRoundedRect(535, 0, 200, 80, 5);
-        this.timerText = this.add.bitmapText(640, 45, 'minecraftFont', '0:00', 64).setOrigin(0.5, 0.5);
+        this.timerText = this.add.bitmapText(640, 45, 'MinecraftFont', '0:00', 64).setOrigin(0.5, 0.5);
         // this.timerText.setCharacterTint(0, -1, true, 0x00ff00);
         this.isRunning = false;
     }
     addInputContainer(){
         this.box = this.add.rectangle(640, 670, 1280, 100, 0xd3d3d3, 80);
         //scroller is of type container
-        this.instructions = this.add.bitmapText(600, 360, 'minecraftFont', 'Guess how long the ants will take', 40).setOrigin(.5);
+        this.instructions = this.add.bitmapText(600, 360, 'MinecraftFont', 'Guess how long the ants will take', 40).setOrigin(.5);
         TweenHelper.flashElement(this, this.instructions);
-        this.sliderTxt = this.add.bitmapText(320, 656, 'minecraftFont', "10 Seconds", 20);
+        this.sliderTxt = this.add.bitmapText(320, 656, 'MinecraftFont', "10 Seconds", 20);
         this.scroller = this.createSlider(this.sliderTxt);
         let startButton = this.add.sprite(1000, 665, 'startButton').setInteractive();
         startButton.on('pointerdown', ()=>{
