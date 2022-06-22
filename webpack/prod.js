@@ -8,6 +8,11 @@ module.exports = merge(base, {
   output: {
     filename: "bundle.min.js"
   },
+  resolve: {
+    alias: {
+      assets: path.join(__dirname, '../src/assets'),
+    },
+  },
   devtool: false,
   performance: {
     maxEntrypointSize: 900000,

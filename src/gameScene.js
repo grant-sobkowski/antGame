@@ -1,11 +1,19 @@
 import 'phaser';
 import antImg from './img/pixelAnt.png';
-import antWithFoodImg from './img/pixelAntWithFood.png';
+import antWithFoodImg from './img/pixelAntWithFoodv2.png';
 import nestImg from './img/barrelGreen_top.png';
 import toNest from './img/barrelRed_top.png';
 import toFood from './img/treeGreen_small.png';
+import burger from './img/burger_small.png';
 import boulder from './img/boulder.png';
-import Button from './button.js';
+import background from './img/background_sand.png';
+import Button from './components/button.js';
+import TweenHelper from './components/tweenHelper';
+import pixelScroller from './img/pixelTrack6.png';
+import pixelThumb from './img/pixelThumb7.png';
+import startButton from './img/startButton_sized8.png';
+
+
 
 export default class gameScene extends Phaser.Scene{
     constructor() {
@@ -21,23 +29,44 @@ export default class gameScene extends Phaser.Scene{
     preload(){
         this.load.scenePlugin({
             key: 'rexuiplugin',
-            url: './src/rexuiplugin.min.js',
+            url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
             sceneKey: 'rexUI'
         });
+        this.load.plugin('rexanchorplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexanchorplugin.min.js', true);
         this.load.image('ant', antImg);
         this.load.image('antWithFood', antWithFoodImg);
         this.load.image('nest', nestImg);
         this.load.image('toNestPath', toNest);
         this.load.image('toFoodPath', toFood);
         this.load.image('boulder', boulder);
+        this.load.image('burger', burger);
+        this.load.image('background', background);
+        this.load.image('pixelScroller', pixelScroller);
+        this.load.image('pixelThumb', pixelThumb);
+        this.load.image('startButton', startButton);
     }
 //PHASER BASE FUNCTION: initializes starting objects
     create(){
         var self = this;
+
+      
         //set background color
-        this.cameras.main.setBackgroundColor('#808080')
+        let sandImage = this.add.image(10, 10, 'background');
+        this.plugins.get('rexanchorplugin').add(sandImage, {
+            left: 'left+0',
+            top: 'top+0',
+
+            width: '100%',
+            // height: '30%',
+            onResizeCallback: function (width, height) {
+                this.setSize(width, height)
+                    .updateDisplayOrigin()  // Bug, fixed in p3.60
+            },
+            onResizeCallbackScope: sandImage
+        });
+
         //bounds
-        this.physics.world.setBounds(0, 0, 1200, 800);
+        this.physics.world.setBounds(0, 0, 1280, 720);
 
         let fArrX = [];
         let fArrY = [];
@@ -46,9 +75,11 @@ export default class gameScene extends Phaser.Scene{
         fArrX.push(nestCoords[0]+98);
         fArrY.push(nestCoords[1]-70);
 
-        //debug
-        this.dbgText = this.add.text(10, 10, 'Move the mouse', { font: '16px Courier', fill: '#00ff00' });
-        this.endButton = new Button(1100, 30, "End Simulation", this, () => this.isGameScene(false));
+        // debug
+        // this.dbgText = this.add.text(10, 10, 'Move the mouse', { font: '16px Courier', fill: '#00ff00' });
+        // this.endButton = new Button(1100, 50, "End Simulation", this, () => this.isGameScene(false));
+        var keyObj = this.input.keyboard.addKey('esc');  // Get key object
+        keyObj.on('down', ()=>{this.isGameScene(false)} );
         
         //groups
         this.foodMarkers = this.physics.add.staticGroup();
@@ -58,9 +89,9 @@ export default class gameScene extends Phaser.Scene{
         this.antGroupWithFood = this.physics.add.group();
 
         //food sprite/hpbar
-        this.food = this.physics.add.staticSprite(1000, 200, 'toFoodPath');
+        this.food = this.physics.add.staticSprite(1000, 200, 'burger');
         this.food.setSize(75, 75);
-        this.foodHP = 100;
+        this.foodHP = 1000;
         this.foodHpBar = new Phaser.GameObjects.Graphics(this);
         this.foodCoords = [1000, 200];
         fArrX.push(1098);
@@ -72,14 +103,32 @@ export default class gameScene extends Phaser.Scene{
         this.spawnFeatures(fArrX, fArrY);
         this.addInputContainer();
         self.guessTime = 0;
+
+        //timerGraphics
+        this.graphics = this.add.graphics();
+        this.graphics.lineStyle(2, 0xffffff, 1);
+        //  32px radius on the corners
+        this.graphics.strokeRoundedRect(535, 0, 200, 80, 5);
+        this.graphics.lineStyle(2, 0x000000, 1);
+        this.graphics.fillRoundedRect(535, 0, 200, 80, 5);
+        this.timerText = this.add.bitmapText(640, 45, 'MinecraftFont', '0:00', 64).setOrigin(0.5, 0.5);
+        // this.timerText.setCharacterTint(0, -1, true, 0x00ff00);
+        this.isRunning = false;
     }
     addInputContainer(){
-        this.box = this.add.rectangle(600, 750, 1200, 100, 0xd3d3d3, 80);
+        this.box = this.add.rectangle(640, 670, 1280, 100, 0xd3d3d3, 80);
         //scroller is of type container
-        this.instructions = this.add.text(100, 710, "Guess how long the ants will take:", { font: '18px Courier', fill: '#ffffff' })
-        this.sliderTxt = this.add.text(320, 755, "10 Seconds", { font: '16px Courier', fill: '#ffffff' });
+        this.instructions = this.add.bitmapText(600, 360, 'MinecraftFont', 'Guess how long the ants will take', 40).setOrigin(.5);
+        TweenHelper.flashElement(this, this.instructions);
+        this.sliderTxt = this.add.bitmapText(320, 656, 'MinecraftFont', "10 Seconds", 20);
         this.scroller = this.createSlider(this.sliderTxt);
-        this.startButton = new Button(900, 750, "Start Simulation", this, () => this.startSim());
+        let startButton = this.add.sprite(1000, 665, 'startButton').setInteractive();
+        startButton.on('pointerdown', ()=>{
+            this.startSim();
+        })
+        startButton.on('pointerover', ()=>startButton.setTint(0x03a8f4));
+        startButton.on('pointerout', ()=>startButton.clearTint());
+        this.startButton = startButton;
     }
     destroyInputContainer(){
         this.box.destroy();
@@ -98,18 +147,20 @@ export default class gameScene extends Phaser.Scene{
     }
     startSim(){
 
-        console.log('startSim() called!');
+        // console.log('startSim() called!');
         //spawns ants, timer, and despawns config stuff.
         //spawns ants
         this.destroyInputContainer();
-        this.addAnts(15);
-        //adds colliders
+        this.addAnts(100);
+        this.updatePaths();
+        //adds collidersS
         this.physics.add.overlap(this.antGroup, this.foodMarkers, this.collisionMarker, null, this);
         this.physics.add.overlap(this.antGroupWithFood, this.markers, this.collisionMarker, null, this);
         this.physics.add.collider(this.boulders, this.antGroup, this.collisionBoulder, null, this);
         this.physics.add.collider(this.boulders, this.antGroupWithFood, this.collisionBoulder, null, this);
         //start timer
         this.sceneStartTime = this.time.now;
+        this.isRunning = true;
     }
     createSlider(sliderText){
         const COLOR_PRIMARY = 0x4e342e;
@@ -118,17 +169,17 @@ export default class gameScene extends Phaser.Scene{
 
         return this.rexUI.add.slider({
             x: 200,
-            y: 765,
+            y: 665,
             width: 200,
             height: 20,
             orientation: 0,
         
-            track: this.rexUI.add.roundRectangle(0, 0, 0, 0, 6, COLOR_DARK),
-            thumb: this.rexUI.add.roundRectangle(0, 0, 0, 0, 10, COLOR_LIGHT),
+            track: this.add.image(0, 0, 'pixelScroller'),
+            thumb: this.add.image(0, 0, 'pixelThumb'),
  
 
             valuechangeCallback: function(newValue, oldValue, slider) {
-                let secs = 600*newValue + 10;
+                let secs = 240*newValue + 10;
                 let mins = Math.floor(secs/60);
                 self.guessTime = secs;
                 secs = Math.round(secs % 60);
@@ -149,17 +200,28 @@ export default class gameScene extends Phaser.Scene{
         for(let i=0; i<numBoulders; i++){
             let x = this.getRandomInt(1150);
             let y = this.getRandomInt(650);
-            while(this.checkOverlap(featureArrX, featureArrY, x, y)){
-                console.log('checkOverlap returned true');
-                x = this.getRandomInt(1150);
-                y = this.getRandomInt(650);
-            }
-            console.log(`boulder spawned at ${x}, ${y}`);
-            this.boulders.create(x, y, 'boulder')
+            // while(this.checkOverlap(featureArrX, featureArrY, x, y)){
+            //     console.log('checkOverlap returned true');
+            //     x = this.getRandomInt(1150);
+            //     y = this.getRandomInt(650);
+            // }
+            // console.log(`boulder spawned at ${x}, ${y}`);
+            let newBoulder = this.boulders.create(x, y, 'boulder')
             .setScale(.25)
-            .setBodySize(70, 70)
-            .setOffset(153, 170);
+            .setBodySize(65, 63)
+            .setOffset(160, 173);
+            newBoulder.angle = 135;
         }
+        this.physics.world.step(0);
+  
+        this.physics.world.overlap(this.boulders, this.food, function (food, boulder) {
+          var y = 150;
+          
+          boulder.body.reset(boulder.x, boulder.y + y);
+          boulder.setOffset(163, 193);
+
+        //   console.log('Moved boulder down by ' -y);
+        });
     }
     checkOverlap(arrX, arrY, x, y){
         for(let i=0; i<arrX.length; i++){
@@ -205,7 +267,7 @@ export default class gameScene extends Phaser.Scene{
         this.foodHpBar.fillRect(x+2, y+2, 73, 8);
     //health
         this.foodHpBar.fillStyle(0x00ff00);
-        let p = 0.73;
+        let p = 0.073;
         let d = Math.floor(p * this.foodHP);
         this.foodHpBar.fillRect(x + 2, y + 2, d, 8);
 
@@ -214,18 +276,16 @@ export default class gameScene extends Phaser.Scene{
 //PHASER BASE FUNCTION: called each in game tick occurs
     update(){
         try{
-        if((this.moveCounter % 60) == 0){
-            this.updatePaths();
-            if(Math.random()<.4){
+            if((this.moveCounter % 60) == 0){
                 this.turnAnts();
+                this.updatePaths();
             }
-        }
         }catch(e){
             console.error(e);
         }
         try{
         // this.text.setText(`time elapsed: ${Math.round(this.time.now) - Math.round(this.sceneStartTime)}`);
-        this.dbgText.setText(`x: ${game.input.mousePointer.x} y: ${game.input.mousePointer.y} guessTime: ${self.guessTime} elapsedTime: ${this.time.now - this.sceneStartTime}`);
+        // this.dbgText.setText(`guessTime: ${self.guessTime} elapsedTime: ${this.time.now - this.sceneStartTime}`);
         }catch(e){
             console.error(e);
         }
@@ -233,8 +293,20 @@ export default class gameScene extends Phaser.Scene{
         this.updateAnts();
         this.drawFood(1000, 200);
         this.isGameScene();
+        this.updateTimer();
     }
 ////UPDATE CALLBACK FUNCTIONS////
+    updateTimer(){
+        if(this.isRunning){
+        let elapsedTime = (this.time.now) - (this.sceneStartTime);
+        let seconds = Math.round(elapsedTime/1000);
+        let remSeconds = Math.round(seconds % 60);
+        let ones = remSeconds % 10;
+        let tens = Math.floor(remSeconds/10);
+        let mins = Math.floor(seconds/60);
+        this.timerText.setText(`${mins}:${tens}${ones}`);
+        }
+    }
     updateAnts(){
         this.antArray.forEach((ant)=>{
             if(ant[0].getData('mode')=='randomTraj'){
@@ -281,7 +353,7 @@ export default class gameScene extends Phaser.Scene{
         if(normalAngle < 0){
             normalAngle += 360;
         }
-        let hypotenuse = 80;
+        let hypotenuse = 40;
         let xVel = hypotenuse * Math.cos(this.degToRad(normalAngle));
         let yVel = -1 * hypotenuse * Math.sin(this.degToRad(normalAngle));
 
@@ -289,10 +361,10 @@ export default class gameScene extends Phaser.Scene{
     }
     //Movement mode -> ants move at constant speed of 20 while moving
     antToNest(ant, nextMarker){
-        let targetXpos = nextMarker.x;
-        let targetYpos = nextMarker.y;
-        let diffX = Math.abs(nextMarker.x - ant.x);
-        let diffY = Math.abs(nextMarker.y - ant.y);
+        let targetXpos = nextMarker.x -7;
+        let targetYpos = nextMarker.y - 7;
+        let diffX = Math.abs((nextMarker.x -7) - ant.x);
+        let diffY = Math.abs((nextMarker.y - 7) - ant.y);
         if(diffX < 3 && diffY < 3){
             try{
             let markerCountToFood = ant.getData('markerCountToFood');
@@ -327,7 +399,7 @@ export default class gameScene extends Phaser.Scene{
         //ant[3] = last marker obj (undefined if nest/food) ant[4] = iterator count to determine pos in list
         this.antArray.forEach((ant)=>{
             if(ant[0].getData('mode')=='randomTraj'){
-                let marker = this.markers.create(ant[0].x + 7, ant[0].y +7, 'toNestPath');
+                let marker = this.markers.create(ant[0].x +7, ant[0].y+7, 'toNestPath');
                 marker.setScale(.2);
                 marker.setBodySize(15, 15);
                 marker.setDisplayOrigin(45, 45);
@@ -343,8 +415,10 @@ export default class gameScene extends Phaser.Scene{
     }
     turnAnts(){
         this.antArray.forEach((ant)=>{
-            if(ant[0].getData('mode')=='randomTraj'){
-            this.handleTurn(ant[0], ant[1], ant[2]);
+            if(Math.random()<0.25){
+                if(ant[0].getData('mode')=='randomTraj'){
+                this.handleTurn(ant[0], ant[1], ant[2]);
+                }
             }
         });
     }
@@ -381,7 +455,7 @@ export default class gameScene extends Phaser.Scene{
         if(this.foodHP <= 0 || !command){
             let gTime = this.roundDec(self.guessTime, 2);
             let elapsedTime = (this.time.now - this.sceneStartTime)/100;
-            this.scene.start("endScene", {guessTime: gTime, elapsedTime: elapsedTime});
+            this.scene.start("endScene", {guessTime: gTime, elapsedTime: elapsedTime, isLeaderboard: false});
         }
         // TODO update score graphic
     }
@@ -394,13 +468,12 @@ export default class gameScene extends Phaser.Scene{
             ant.setData('mode', 'randomTraj');
             ant.setTexture('ant');
             ant.setVelocity(this.getRandomTrajectory(), this.getRandomTrajectory);
-            this.addAnts(1);
         }
     }
     //If ant is in randomTraj mode, updates trail, if ant is in toFood mode, updates ant mode
     collisionFood(ant, food){
         if(ant.getData('mode')==='randomTraj'){
-            this.foodHP-= 100;
+            this.foodHP-= 0.1;
             let currentMark = ant.getData('lastMark');
             ant.setData('markerCountToFood', 0);
             let dummyHead = new Object();
@@ -415,6 +488,8 @@ export default class gameScene extends Phaser.Scene{
             //advances loop forward
             ant.setData({'mode': 'toNest', 'markerCountToNest': 0, 'markerCountToFood': 0});
             ant.setTexture('antWithFood');
+            ant.setOrigin(0.5);
+            ant.setBodySize(1, 1);
             this.antGroupWithFood.add(ant);
         }
         else if(ant.getData('mode')==='toFood'){
@@ -432,7 +507,7 @@ export default class gameScene extends Phaser.Scene{
         }
         if(ant.getData('mode')==='randomTraj'){
             if(marker.getData('isToFood')){
-                console.log('randomTraj ant hit toFood marker! new marker = ' + marker.x + ' ' + marker. y);
+                // console.log('randomTraj ant hit toFood marker! new marker = ' + marker.x + ' ' + marker. y);
                 this.antGroupWithFood.add(ant);
                 ant.setData({'mode': 'toFood', 'nextMark': marker});
             }
@@ -499,7 +574,7 @@ export default class gameScene extends Phaser.Scene{
         //returns variable speed for ants from -100 to 100
         getRandomTrajectory(){
             let rng = Math.random() - .495;
-            return (rng*200);
+            return (rng*100);
         }
         getRandomInt(max){
             return Math.floor(Math.random() * max);

@@ -4,8 +4,10 @@
   "description": "A Phaser 3 Project Template",
   "main": "src/index.js",
   "scripts": {
+    "start": "node server.js",
     "build": "webpack --config webpack/prod.js ",
-    "start": "webpack-dev-server --config webpack/base.js --open"
+    "dev-server": "node devServer.js",
+    "dev": "webpack-dev-server --config webpack/base.js --open"
   },
   "repository": {
     "type": "git",
@@ -22,7 +24,9 @@
     "@babel/core": "^7.7.2",
     "@babel/preset-env": "^7.7.1",
     "babel-loader": "^8.0.6",
+    "babel-polyfill": "^6.26.0",
     "clean-webpack-plugin": "^3.0.0",
+    "dotenv": "^16.0.0",
     "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
     "raw-loader": "^3.1.0",
@@ -33,7 +37,11 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "mongoose": "^6.2.2",
     "phaser": "^3.55.2",
+    "phaser-webpack-loader": "^2.0.0",
     "phaser3-rex-plugins": "^1.1.65"
   }
 }
